@@ -1,9 +1,18 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
 const server = express();
+server.use(express.json());
+server.use(cors());
+server.use(helmet());
 
-// Configure your server here
-// Build your actions router in /api/actions/actions-router.js
-// Build your projects router in /api/projects/projects-router.js
-// Do NOT `server.listen()` inside this file!
+const projectsRouter = require("./projects/projects-router.js");
+const actionsRouter = require("./actions/actions-router")
+server.use("/api/projects", projectsRouter);
+server.use("/api/actions", actionsRouter)
+
+server.get("*", (req, res) => {
+  res.send(`<h3> Path not found</h3>`);
+});
 
 module.exports = server;
